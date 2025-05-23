@@ -11,7 +11,7 @@ function BootupUI:Create(titleText, subtitleText)
 	local frame = Instance.new("Frame")
 	frame.Size = UDim2.new(0, 475, 0, 220)
 	frame.Position = UDim2.new(0.5, -237, 0.5, -110)
-	frame.BackgroundColor3 = Color3.fromRGB(22, 22, 22) -- Rayfield-like background
+	frame.BackgroundColor3 = Color3.fromRGB(22, 22, 22)
 	frame.BorderSizePixel = 0
 	frame.Parent = gui
 
@@ -21,7 +21,7 @@ function BootupUI:Create(titleText, subtitleText)
 
 	local title = Instance.new("TextLabel")
 	title.Text = titleText or "Loading UI"
-	title.Font = Enum.Font.GothamSemibold -- Substitute for Ancizar Sans
+	title.Font = Enum.Font.GothamSemibold
 	title.TextSize = 24
 	title.TextColor3 = Color3.fromRGB(255, 255, 255)
 	title.BackgroundTransparency = 1
@@ -54,12 +54,25 @@ function BootupUI:Create(titleText, subtitleText)
 	percent.TextYAlignment = Enum.TextYAlignment.Center
 	percent.Parent = frame
 
-	-- Simulate loading
+	-- Simulate loading with fade-out
 	coroutine.wrap(function()
 		for i = 0, 100, 1 do
 			percent.Text = i .. "%"
 			wait(0.025)
 		end
+
+		-- Fade out effect
+		for t = 0, 1, 0.05 do
+			frame.BackgroundTransparency = t
+			for _, child in ipairs(frame:GetChildren()) do
+				if child:IsA("TextLabel") then
+					child.TextTransparency = t
+				end
+			end
+			wait(0.03)
+		end
+
+		gui:Destroy()
 	end)()
 
 	return gui
